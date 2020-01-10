@@ -55,7 +55,7 @@
             <artifactId>jackson-core-asl</artifactId>
             <version>1.9.13</version>
         </dependency>
-
+      
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
@@ -67,17 +67,20 @@
             <artifactId>json</artifactId>
             <version>20190722</version>
         </dependency>
+      
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
             <version>4.1.2</version>
             <scope>compile</scope>
         </dependency>
+      
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>7.0.0</version>
             <scope>compile</scope>
+
         </dependency>
 
 
