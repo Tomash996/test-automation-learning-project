@@ -1,4 +1,4 @@
-package api;
+package placeholder.service;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -7,7 +7,7 @@ import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
 import io.restassured.specification.RequestSpecification;
 import org.json.JSONObject;
-import org.softserve.models.UserDTO;
+import org.softserve.models.user.UserDTO;
 import org.softserve.utils.PropertiesLoader;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
@@ -20,15 +20,17 @@ import static org.testng.Assert.assertTrue;
 
 public class UserApiTests {
 
+    // TODO should be refactored
+    //  All tests need to move to TestUser class using example test in this class
+
     @BeforeClass
     public void setBaseUri() {
-        RestAssured.baseURI = PropertiesLoader.loadProjectProperties().getMainUrl();
+       PropertiesLoader.loadProjectProperties();
     }
 
     @Test(testName = "TC-01",
             description = "Invalid UserID verification",
             groups = {"api", "regression"})
-
     public void updateInvalidUserID() {
 
         //   String jsonString = "{\r\n" + " \"id\" : \"12\",\r\n" + "}";
