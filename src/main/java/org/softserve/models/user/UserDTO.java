@@ -1,22 +1,35 @@
-package org.softserve.models;
+package org.softserve.models.user;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Objects;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.softserve.models.AbstractDTO;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UserDTO {
+public class UserDTO extends AbstractDTO {
 
+    @JsonProperty(value = "id")
+    private String id;
     @JsonProperty(value = "name")
     private String name;
     private String username;
     private String email;
     private String phone;
     private String website;
-    private Address address;
-    private Company company;
+    private AddressDTO address;
+    private CompanyDTO company;
 
+    public String getId() {
+        return id;
+    }
+
+    public UserDTO setId(String id) {
+        this.id = id;
+        return this;
+    }
 
     public String getName() {
         return name;
@@ -63,26 +76,26 @@ public class UserDTO {
         return this;
     }
 
-    public Address getAddress() {
+    public AddressDTO getAddress() {
         return address;
     }
 
-    public UserDTO setAddress(Address address) {
+    public UserDTO setAddress(AddressDTO address) {
         this.address = address;
         return this;
     }
 
-    public Company getCompany() {
+    public CompanyDTO getCompany() {
         return company;
     }
 
-    public UserDTO setCompany(Company company) {
+    public UserDTO setCompany(CompanyDTO company) {
         this.company = company;
         return this;
     }
 
+    // TODO should be removed
     @Override
-
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Test User Data\n");
@@ -98,7 +111,7 @@ public class UserDTO {
 
         return sb.toString();
     }
-
+    // TODO should be removed
     public static UserDTO createUser() {
 
         UserDTO user = new UserDTO();
@@ -106,7 +119,7 @@ public class UserDTO {
         user.setUsername("DavidJohnson");
         user.setEmail("test@email.com");
 
-        Address address = new Address();
+        AddressDTO address = new AddressDTO();
         address.setCity("London");
         address.setStreet("Blackwood Str");
         address.setSuite("TestSuite");
@@ -117,7 +130,7 @@ public class UserDTO {
         user.setPhone("0212896652");
         user.setWebsite("www.Johnson.com");
 
-        Company company = new Company();
+        CompanyDTO company = new CompanyDTO();
         company.setBs("Test BS");
         company.setName("Johnson & Johnson");
         company.setCatchPhrase("Test Phrase");
@@ -129,20 +142,39 @@ public class UserDTO {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
         UserDTO userDTO = (UserDTO) o;
-        return Objects.equals(name, userDTO.name) &&
-                Objects.equals(username, userDTO.username) &&
-                Objects.equals(email, userDTO.email) &&
-                Objects.equals(phone, userDTO.phone) &&
-                Objects.equals(website, userDTO.website) &&
-                Objects.equals(address, userDTO.address) &&
-                Objects.equals(company, userDTO.company);
+
+        return new EqualsBuilder()
+            .append(id, userDTO.id)
+            .append(name, userDTO.name)
+            .append(username, userDTO.username)
+            .append(email, userDTO.email)
+            .append(phone, userDTO.phone)
+            .append(website, userDTO.website)
+            .append(address, userDTO.address)
+            .append(company, userDTO.company)
+            .isEquals();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, username, email, phone, website, address, company);
+        return new HashCodeBuilder(17, 37)
+            .append(id)
+            .append(name)
+            .append(username)
+            .append(email)
+            .append(phone)
+            .append(website)
+            .append(address)
+            .append(company)
+            .toHashCode();
     }
 }

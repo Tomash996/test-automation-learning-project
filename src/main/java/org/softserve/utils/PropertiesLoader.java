@@ -39,7 +39,8 @@ public class PropertiesLoader {
         return props;
     }
 
-    public String getMainUrl() {
-        return props.getProperty("MAIN_URL");
+    public String getSetting(String propertyName){
+        return props.getProperty(propertyName);
     }
+
 }
