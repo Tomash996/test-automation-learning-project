@@ -45,4 +45,24 @@ public class AbstractWebEndpoint {
     }
 
 
+    public ValidatableResponse put(String path, Object bodyPayload, Object... pathParams){
+        return this.post(this.requestSpecification, path, bodyPayload, pathParams);
+    }
+
+    public ValidatableResponse put(RequestSpecification requestSpecification, String path, Object bodyPayload,  Object... pathParams) {
+        RequestSpecBuilder specBuilder = new RequestSpecBuilder();
+        specBuilder.addRequestSpecification(requestSpecification);
+
+        if (bodyPayload != null) {
+            specBuilder.setBody(bodyPayload);
+        }
+
+        return given()
+                .spec(specBuilder.build())
+                .when()
+                .put(path, pathParams)
+                .then();
+    }
+
+
 }

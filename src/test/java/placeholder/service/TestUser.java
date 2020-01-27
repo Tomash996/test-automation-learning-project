@@ -2,11 +2,18 @@ package placeholder.service;
 
 import static org.softserve.service.placeholder.PlaceholderApi.placeholderApi;
 
+import io.restassured.RestAssured;
+import io.restassured.path.json.JsonPath;
+import io.restassured.response.Response;
+import io.restassured.response.ValidatableResponse;
 import org.softserve.models.user.AddressDTO;
 import org.softserve.models.user.CompanyDTO;
 import org.softserve.models.user.UserDTO;
+import org.softserve.service.placeholder.endpoints.InvalidIdEndpoint;
 import org.softserve.testcases.common.BaseServiceTestCase;
 import org.testng.annotations.Test;
+
+import java.util.List;
 
 public class TestUser extends BaseServiceTestCase {
 
@@ -30,9 +37,16 @@ public class TestUser extends BaseServiceTestCase {
             .setCompany(company);
     }
 
+
+    private UserDTO getUserID(){
+      return new UserDTO()
+              .setId("12");
+    }
+
     @Test(testName = "C00001",
         description = "Placeholder: User: Verify ability to create new user",
         groups = {"api", "regression"})
+
     public void testVerifyAbilityToCreateNewUser() {
         UserDTO payloadData = getUserPayload();
         UserDTO userResponse = placeholderApi().user().createNewUser(payloadData);
@@ -45,5 +59,53 @@ public class TestUser extends BaseServiceTestCase {
             .isEqualTo(payloadData);
         softAssert.assertAll();
     }
+
+
+
+
+    @Test(testName = "C00003",
+            description = "Placeholder: User: Verify ability to change User ID to invalid value",
+            groups = {"api", "regression"})
+    public void testVerifyUpdateUser(){
+        UserDTO payloadData = getUserPayload();
+        UserDTO userResponse = placeholderApi().user().createNewUser(payloadData);
+
+        UserDTO updatedUserPayload = payloadData
+                .setName("Updated User Name")
+                .setCompany(new CompanyDTO().setName("Test Updated Company"));
+
+        UserDTO updatedUserResponse = placeholderApi().user().updateUser("10", updatedUserPayload);
+        updatedUserPayload.setId("10");
+
+        softAssert.assertThat(updatedUserResponse)
+                .usingRecursiveComparison()
+                .ignoringActualNullFields()
+                .ignoringAllOverriddenEquals()
+                .isEqualTo(updatedUserPayload);
+        softAssert.assertAll();
+
+    }
+
+
+    @Test(testName = "C00005",
+            description = "Placeholder: User: Verify ability to change User ID to invalid value",
+            groups = {"api", "regression"})
+    public void testVerifyUpdateUserByInvalidId(){
+        UserDTO payloadData = getUserPayload();
+        UserDTO updatedUserPayload = payloadData
+                .setName("Updated User Name")
+                .setCompany(new CompanyDTO().setName("Test Updated Company"));
+        String invalidId = "11";
+        ValidatableResponse errorResponse =  placeholderApi().user().updateUser(invalidId, updatedUserPayload,404);
+
+
+        softAssert.assertThat(errorResponse.extract().asString())
+                .contains("Invalid User Id Provided");
+        softAssert.assertAll();
+
+    }
+
+
+
 
 }

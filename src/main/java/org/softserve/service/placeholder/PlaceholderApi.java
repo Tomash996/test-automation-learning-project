@@ -2,6 +2,7 @@ package org.softserve.service.placeholder;
 
 import io.restassured.specification.RequestSpecification;
 import org.softserve.service.common.AbstractWebService;
+import org.softserve.service.placeholder.endpoints.InvalidIdEndpoint;
 import org.softserve.service.placeholder.endpoints.UserEndpoint;
 
 public class PlaceholderApi extends AbstractWebService {
@@ -9,6 +10,7 @@ public class PlaceholderApi extends AbstractWebService {
     private static final String PLACEHOLDER_SETTING = "JSONPLACEHOLDER_URL";
 
     private UserEndpoint userEndpoint;
+    private InvalidIdEndpoint invalidIdEndpoint;
 
     private static ThreadLocal<PlaceholderApi> webApi = new ThreadLocal<>();
 
@@ -34,10 +36,21 @@ public class PlaceholderApi extends AbstractWebService {
         initUserEndpoint(requestSpecification);
     }
 
-    private void initUserEndpoint(RequestSpecification requestSpecification){
+    private void initUserEndpoint(RequestSpecification requestSpecification) {
         userEndpoint = new UserEndpoint(requestSpecification);
     }
 
-    public UserEndpoint user() {return userEndpoint;}
+    private void initInvalidIdEndpoint(RequestSpecification requestSpecification) {
+        invalidIdEndpoint = new InvalidIdEndpoint(requestSpecification);
+    }
 
+
+    public UserEndpoint user() {
+        return userEndpoint;
+    }
+
+
+    public InvalidIdEndpoint invalidId() {
+        return invalidIdEndpoint;
+    }
 }

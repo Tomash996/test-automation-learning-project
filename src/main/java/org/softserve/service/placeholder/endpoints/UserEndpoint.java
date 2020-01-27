@@ -11,7 +11,11 @@ import org.softserve.service.common.AbstractWebEndpoint;
 public class UserEndpoint extends AbstractWebEndpoint {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final String PATH_USER = "users";
+    private static final String PATH_USERS = "users";
+    private static final String PATH_USER_RESOURCE = "users/{user_Id}";
+
+
+
 
     public UserEndpoint(RequestSpecification requestSpecification){
         this.requestSpecification = requestSpecification;
@@ -24,6 +28,7 @@ public class UserEndpoint extends AbstractWebEndpoint {
         return validatableResponse.extract().as(UserDTO.class);
     }
 
+
     public ValidatableResponse createNewUser(UserDTO payload, int status) {
         return this.createUser(payload).statusCode(status);
     }
@@ -32,9 +37,31 @@ public class UserEndpoint extends AbstractWebEndpoint {
         LOGGER.info("Creating new User:\n");
         return this.post(
             requestSpecification,
-            PATH_USER,
+                PATH_USERS,
             payload);
     }
 
+
+    public UserDTO[] updateUser(String userId, UserDTO payload) {
+        ValidatableResponse validatableResponse = updateUser(
+                userId,
+                payload,
+                HttpStatus.SC_OK);
+        return validatableResponse.extract().as(UserDTO[].class);
+    }
+
+
+    public ValidatableResponse updateUser(String userId, UserDTO payload, int status) {
+        return this.updateUserNoValidation(userId, payload).statusCode(status);
+    }
+
+    private ValidatableResponse updateUserNoValidation(String userId, UserDTO userData){
+        LOGGER.info("Update User:\n");
+        return this.put(
+                requestSpecification,
+                PATH_USER_RESOURCE,
+                userData,
+                userId);
+    }
 
 }
