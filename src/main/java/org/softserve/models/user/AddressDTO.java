@@ -3,9 +3,10 @@ package org.softserve.models.user;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.softserve.models.AbstractDTO;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class AddressDTO {
+
+public class AddressDTO extends AbstractDTO {
 
     private String street;
     private String suite;
