@@ -2,8 +2,11 @@ package org.softserve.service.common;
 
 import static io.restassured.RestAssured.given;
 
+import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.http.ContentType;
 import io.restassured.mapper.ObjectMapperType;
+import io.restassured.parsing.Parser;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 
@@ -44,5 +47,43 @@ public class AbstractWebEndpoint {
             .then();
     }
 
+
+    public ValidatableResponse put(String path, Object bodyPayload, Object... pathParams){
+        return this.post(this.requestSpecification, path, bodyPayload, pathParams);
+    }
+
+    public ValidatableResponse put(RequestSpecification requestSpecification, String path, Object bodyPayload,  Object... pathParams) {
+        RequestSpecBuilder specBuilder = new RequestSpecBuilder();
+        specBuilder.addRequestSpecification(requestSpecification);
+
+        if (bodyPayload != null) {
+            specBuilder.setBody(bodyPayload);
+        }
+
+        return given()
+                .spec(specBuilder.build())
+                .when()
+                .put(path, pathParams)
+                .then();
+    }
+
+
+    public ValidatableResponse get(String path, Object... pathParams){
+        return this.get(this.requestSpecification, path, pathParams);
+    }
+
+    public ValidatableResponse get(RequestSpecification requestSpecification, String path,   Object... pathParams) {
+        RequestSpecBuilder specBuilder = new RequestSpecBuilder();
+        specBuilder.addRequestSpecification(requestSpecification);
+
+
+        return
+                given()
+                .spec(specBuilder.build())
+                .when()
+                .get(path, pathParams)
+                .then();
+
+    }
 
 }

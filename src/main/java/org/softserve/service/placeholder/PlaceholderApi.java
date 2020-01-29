@@ -2,6 +2,7 @@ package org.softserve.service.placeholder;
 
 import io.restassured.specification.RequestSpecification;
 import org.softserve.service.common.AbstractWebService;
+
 import org.softserve.service.placeholder.endpoints.UserEndpoint;
 
 public class PlaceholderApi extends AbstractWebService {
@@ -34,10 +35,12 @@ public class PlaceholderApi extends AbstractWebService {
         initUserEndpoint(requestSpecification);
     }
 
-    private void initUserEndpoint(RequestSpecification requestSpecification){
+    private void initUserEndpoint(RequestSpecification requestSpecification) {
         userEndpoint = new UserEndpoint(requestSpecification);
     }
 
-    public UserEndpoint user() {return userEndpoint;}
+    public UserEndpoint user() {
+        return userEndpoint;
+    }
 
 }
