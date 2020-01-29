@@ -1,6 +1,5 @@
 package org.softserve.service.placeholder.endpoints;
 
-import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 import org.apache.http.HttpStatus;
@@ -62,38 +61,41 @@ public class UserEndpoint extends AbstractWebEndpoint {
                 userId);
     }
 
-    public UserDTO retrieveUserByID(String userId, UserDTO payload) {
+    public UserDTO retrieveUserByID(String userId) {
         ValidatableResponse validatableResponse = retrieveUserByID(
                 userId,
-                payload,
                 HttpStatus.SC_OK);
         return validatableResponse.extract().as(UserDTO.class);
     }
 
-    public ValidatableResponse retrieveUserByID(String userId, UserDTO payload, int status) {
-        return this.retrieveUserNoValidation(userId, payload).statusCode(status);
+    public ValidatableResponse retrieveUserByID(String userId,  int status) {
+        return this.retrieveUserNoValidation(userId).statusCode(status);
     }
 
-    private ValidatableResponse retrieveUserNoValidation(String userId, UserDTO userData) {
+    private ValidatableResponse retrieveUserNoValidation(String userId) {
         LOGGER.info("Retrieve User Info:\n");
         return this.get(
                 requestSpecification,
                 PATH_USER_RESOURCE,
-                userData,
                 userId);
+    }
+
+ public UserDTO[] getUserList(){
+        ValidatableResponse validatableResponse = getUserList(
+                200);
+ return validatableResponse.extract().as(UserDTO[].class);
     }
 
 
     public ValidatableResponse getUserList(int status) {
-        return this.getUserListNoValidation(status).statusCode(status);
+        return this.getUserListNoValidation().statusCode(status);
     }
 
-    private ValidatableResponse getUserListNoValidation(int status) {
+    private ValidatableResponse getUserListNoValidation() {
         LOGGER.info("Get Users List :\n");
         return this.get(
                 requestSpecification,
-                PATH_USERS,
-               status);
+                PATH_USERS);
     }
 
 }

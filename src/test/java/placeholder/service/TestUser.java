@@ -1,6 +1,7 @@
 package placeholder.service;
 
 import static org.softserve.service.placeholder.PlaceholderApi.placeholderApi;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.path.json.JsonPath;
@@ -10,6 +11,7 @@ import org.softserve.models.user.CompanyDTO;
 import org.softserve.models.user.UserDTO;
 import org.softserve.testcases.common.BaseServiceTestCase;
 import org.testng.annotations.Test;
+
 import java.util.*;
 
 @JsonFormat(shape = JsonFormat.Shape.ARRAY)
@@ -35,12 +37,6 @@ public class TestUser extends BaseServiceTestCase {
                 .setWebsite("www.Johnson.com")
                 .setCompany(company);
     }
-
-    private UserDTO getCustomId() {
-        return new UserDTO()
-                .setId("1");
-    }
-
 
     @Test(testName = "C00001",
             description = "Placeholder: User: Verify ability to create new user",
@@ -98,22 +94,11 @@ public class TestUser extends BaseServiceTestCase {
 
     }
 
-
     @Test(testName = "C00006",
             description = "Placeholder: User:  Verify possibility to retrieve User by Id Scenario",
             groups = {"api", "regression"})
     public void testVerifyUserByID() {
-        System.out.println("dfgdsgfhs ");
-        ObjectMapper mapper = new ObjectMapper();
-        UserDTO customId = getCustomId();
-        UserDTO retrievedUserResponse = placeholderApi().user().retrieveUserByID("1", customId);
-
-        try {
-            UserDTO userDTO = mapper.readValue(retrievedUserResponse.toString(), UserDTO.class);
-            System.out.println("UserDTO " + userDTO);
-        } catch (Exception e) {
-            System.out.println("FAILED");
-        }
+        UserDTO retrievedUserResponse = placeholderApi().user().retrieveUserByID("1");
 
         softAssert.assertThat(retrievedUserResponse.toString())
                 .contains("Leanne Graham")
@@ -126,18 +111,14 @@ public class TestUser extends BaseServiceTestCase {
             description = "Placeholder: User: Verify that User List contains more than 5 items",
             groups = {"api", "regression"})
     public void testVerifyUserList() {
-        ValidatableResponse userListResponse = placeholderApi().user().getUserList(200);
-        JsonPath jsonPathValidator = userListResponse.extract().jsonPath();
-        ArrayList recievedUserList  = jsonPathValidator.get("id");
-        System.out.println(recievedUserList);
+        UserDTO[] userListResponse = placeholderApi().user().getUserList();
+        ValidatableResponse responseCode = placeholderApi().user().getUserList(200);
 
-        softAssert.assertThat(recievedUserList)
+        softAssert.assertThat(userListResponse)
                 .hasSizeGreaterThan(5);
         softAssert.assertAll();
 
     }
 }
-
-
 
 

@@ -68,17 +68,14 @@ public class AbstractWebEndpoint {
     }
 
 
-    public ValidatableResponse get(String path, Object bodyPayload, Object... pathParams){
-        return this.get(this.requestSpecification, path, bodyPayload, pathParams);
+    public ValidatableResponse get(String path, Object... pathParams){
+        return this.get(this.requestSpecification, path, pathParams);
     }
 
-    public ValidatableResponse get(RequestSpecification requestSpecification, String path, Object bodyPayload,  Object... pathParams) {
+    public ValidatableResponse get(RequestSpecification requestSpecification, String path,   Object... pathParams) {
         RequestSpecBuilder specBuilder = new RequestSpecBuilder();
         specBuilder.addRequestSpecification(requestSpecification);
 
-        if (bodyPayload != null) {
-            specBuilder.setBody(bodyPayload);
-        }
 
         return
                 given()
