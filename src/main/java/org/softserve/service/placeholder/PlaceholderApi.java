@@ -12,6 +12,7 @@ public class PlaceholderApi extends AbstractWebService {
     private UserEndpoint userEndpoint;
     private InvalidIdEndpoint invalidIdEndpoint;
 
+
     private static ThreadLocal<PlaceholderApi> webApi = new ThreadLocal<>();
 
     protected PlaceholderApi() {
@@ -53,4 +54,6 @@ public class PlaceholderApi extends AbstractWebService {
     public InvalidIdEndpoint invalidId() {
         return invalidIdEndpoint;
     }
+
+
 }

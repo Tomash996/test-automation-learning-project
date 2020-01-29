@@ -1,5 +1,6 @@
 package org.softserve.service.placeholder.endpoints;
 
+import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 import org.apache.http.HttpStatus;
@@ -15,16 +16,14 @@ public class UserEndpoint extends AbstractWebEndpoint {
     private static final String PATH_USER_RESOURCE = "users/{user_Id}";
 
 
-
-
-    public UserEndpoint(RequestSpecification requestSpecification){
+    public UserEndpoint(RequestSpecification requestSpecification) {
         this.requestSpecification = requestSpecification;
     }
 
     public UserDTO createNewUser(UserDTO payload) {
         ValidatableResponse validatableResponse = createNewUser(
-            payload,
-            HttpStatus.SC_CREATED);
+                payload,
+                HttpStatus.SC_CREATED);
         return validatableResponse.extract().as(UserDTO.class);
     }
 
@@ -36,32 +35,65 @@ public class UserEndpoint extends AbstractWebEndpoint {
     private ValidatableResponse createUser(UserDTO payload) {
         LOGGER.info("Creating new User:\n");
         return this.post(
-            requestSpecification,
+                requestSpecification,
                 PATH_USERS,
-            payload);
+                payload);
     }
 
 
-    public UserDTO[] updateUser(String userId, UserDTO payload) {
+    public UserDTO updateUser(String userId, UserDTO payload) {
         ValidatableResponse validatableResponse = updateUser(
                 userId,
                 payload,
                 HttpStatus.SC_OK);
-        return validatableResponse.extract().as(UserDTO[].class);
+        return validatableResponse.extract().as(UserDTO.class);
     }
-
 
     public ValidatableResponse updateUser(String userId, UserDTO payload, int status) {
         return this.updateUserNoValidation(userId, payload).statusCode(status);
     }
 
-    private ValidatableResponse updateUserNoValidation(String userId, UserDTO userData){
+    private ValidatableResponse updateUserNoValidation(String userId, UserDTO userData) {
         LOGGER.info("Update User:\n");
         return this.put(
                 requestSpecification,
                 PATH_USER_RESOURCE,
                 userData,
                 userId);
+    }
+
+    public UserDTO retrieveUserByID(String userId, UserDTO payload) {
+        ValidatableResponse validatableResponse = retrieveUserByID(
+                userId,
+                payload,
+                HttpStatus.SC_OK);
+        return validatableResponse.extract().as(UserDTO.class);
+    }
+
+    public ValidatableResponse retrieveUserByID(String userId, UserDTO payload, int status) {
+        return this.retrieveUserNoValidation(userId, payload).statusCode(status);
+    }
+
+    private ValidatableResponse retrieveUserNoValidation(String userId, UserDTO userData) {
+        LOGGER.info("Retrieve User Info:\n");
+        return this.get(
+                requestSpecification,
+                PATH_USER_RESOURCE,
+                userData,
+                userId);
+    }
+
+
+    public ValidatableResponse getUserList(int status) {
+        return this.getUserListNoValidation(status).statusCode(status);
+    }
+
+    private ValidatableResponse getUserListNoValidation(int status) {
+        LOGGER.info("Get Users List :\n");
+        return this.get(
+                requestSpecification,
+                PATH_USERS,
+               status);
     }
 
 }

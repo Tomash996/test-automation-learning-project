@@ -18,7 +18,7 @@
         </groups>
 
         <classes>
-            <class name="placeholder.service.UserApiTests"/>
+            <class name="placeholder.service.TestUser"/>
         </classes>
 
     </test>
